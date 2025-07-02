@@ -7,6 +7,9 @@ import uuid
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
+from flask_cors import CORS
+CORS(app)
+
 
 # AWS Config
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')  # Your AWS region
