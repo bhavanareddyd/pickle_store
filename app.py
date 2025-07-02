@@ -27,9 +27,6 @@ SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:123456789012:OrderNotifications'
 # Password hashing
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
-@app.route('/')
-def home():
-    return "✅ Pickle Store backend is running!"
 
 @app.route('/')
 def home():
