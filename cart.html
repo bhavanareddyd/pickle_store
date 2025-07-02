@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .cart-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .cart-title {
+        font-size: 2.5em;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .cart-empty {
+        text-align: center;
+        padding: 60px 20px;
+        color: #7f8c8d;
+    }
+
+    .cart-empty-icon {
+        font-size: 5em;
+        margin-bottom: 20px;
+        display: block;
+    }
+
+    .cart-item {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .item-image {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(45deg, #f39c12, #e67e22);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2em;
+        flex-shrink: 0;
+    }
+
+    .item-details {
+        flex: 1;
+    }
+
+    .item-name {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 5px;
+    }
+
+    .item-price {
+        color: #e74c3c;
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+
+    .item-quantity {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 10px 0;
+    }
+
+    .quantity-display {
+        background: #ecf0f1;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    .item-total {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #27ae60;
+    }
+
+    .remove-btn {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+        font-size: 1.2em;
+        transition: all 0.3s ease;
+    }
+
+    .remove-btn:hover {
+        background: #c0392b;
+        transform: scale(1.1);
+    }
+
+    .cart-summary {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-top: 30px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    .total-amount {
+        font-size: 2em;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    .checkout-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.3em;
+        background: linear-gradient(45deg, #e74c3c, #c0392b);
+    }
+
+    .continue-shopping {
+        display: inline-block;
+        margin-top: 15px;
+        color: #667eea;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .continue-shopping:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="cart-header">
+    <h1 class="cart-title">🛒 Your Cart</h1>
+</div>
+
+{% if cart %}
+    {% for item in cart %}
+    <div class="cart-item">
+        <div class="item-image">
+            🥒
+        </div>
+        
+        <div class="item-details">
+            <div class="item-name">{{ item.name }}</div>
+            <div class="item-price">₹{{ "%.0f"|format(item.price) }} each</div>
+            <div class="item-quantity">
+                <span>Quantity:</span>
+                <span class="quantity-display">{{ item.quantity }}</span>
+            </div>
+            <div class="item-total">
+                Total: ₹{{ "%.0f"|format(item.price * item.quantity) }}
+            </div>
+        </div>
+        
+        <a href="{{ url_for('remove_from_cart', product_id=item.product_id) }}" 
+           class="remove-btn" 
+           onclick="return confirm('Remove this item from cart?')">
+            ×
+        </a>
+    </div>
+    {% endfor %}
+    
+    <div class="cart-summary">
+        <div class="total-amount">
+            Total: ₹{{ "%.0f"|format(total) }}
+        </div>
+        <a href="{{ url_for('checkout') }}" class="btn checkout-btn">
+            💳 Proceed to Checkout
+        </a>
+        <a href="{{ url_for('products') }}" class="continue-shopping">
+            ← Continue Shopping
+        </a>
+    </div>
+    
+{% else %}
+    <div class="cart-empty">
+        <span class="cart-empty-icon">🛒</span>
+        <h2>Your cart is empty!</h2>
+        <p>Add some delicious pickles and snacks to get started.</p>
+        <a href="{{ url_for('products') }}" class="btn" style="margin-top: 20px;">
+            🛍️ Start Shopping
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

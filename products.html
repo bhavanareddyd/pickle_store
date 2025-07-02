@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .products-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .products-title {
+        font-size: 2.5em;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .products-subtitle {
+        color: #7f8c8d;
+        font-size: 1.2em;
+    }
+
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 30px;
+    }
+
+    .product-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(45deg, #f39c12, #e67e22);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4em;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .product-category {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255,255,255,0.9);
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.8em;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    .product-info h3 {
+        color: #2c3e50;
+        font-size: 1.4em;
+        margin-bottom: 10px;
+    }
+
+    .product-description {
+        color: #7f8c8d;
+        margin-bottom: 15px;
+        line-height: 1.5;
+        font-size: 0.95em;
+    }
+
+    .product-price {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #e74c3c;
+        margin-bottom: 15px;
+    }
+
+    .add-to-cart-btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.1em;
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+    }
+
+    .add-to-cart-btn:hover {
+        background: linear-gradient(45deg, #229954, #27ae60);
+    }
+
+    .category-filter {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        padding: 8px 20px;
+        border: 2px solid #667eea;
+        background: transparent;
+        color: #667eea;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+        background: #667eea;
+        color: white;
+    }
+
+    .product-icons {
+        pickle: '🥒',
+        snack: '🥜'
+    }
+</style>
+
+<div class="products-header">
+    <h1 class="products-title">🛍️ Our Products</h1>
+    <p class="products-subtitle">Fresh, homemade pickles and snacks made with traditional recipes</p>
+</div>
+
+<div class="category-filter">
+    <button class="filter-btn active" onclick="filterProducts('all')">All Products</button>
+    <button class="filter-btn" onclick="filterProducts('pickle')">🥒 Pickles</button>
+    <button class="filter-btn" onclick="filterProducts('snack')">🥜 Snacks</button>
+</div>
+
+<div class="products-grid">
+    {% for product in products %}
+    <div class="product-card" data-category="{{ product[5] }}">
+        <div class="product-image">
+            {% if product[5] == 'pickle' %}
+                🥒
+            {% else %}
+                🥜
+            {% endif %}
+            <div class="product-category">{{ product[5].title() }}</div>
+        </div>
+        
+        <div class="product-info">
+            <h3>{{ product[1] }}</h3>
+            <p class="product-description">{{ product[2] }}</p>
+            <div class="product-price">₹{{ "%.0f"|format(product[3]) }}</div>
+            <a href="{{ url_for('add_to_cart', product_id=product[0]) }}" class="btn add-to-cart-btn">
+                🛒 Add to Cart
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    function filterProducts(category) {
+        const cards = document.querySelectorAll('.product-card');
+        const buttons = document.querySelectorAll('.filter-btn');
+        
+        // Update active button
+        buttons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+
+        
+        // Filter products
+        cards.forEach(card => {
+            if (category === 'all' || card.dataset.category === category) {
+                card.style.display = 'block';
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'scale(1)';
+                }, 50);
+            } else {
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.8)';
+                setTimeout(() => {
+                    card.style.display = 'none';
+                }, 300);
+            }
+        });
+    }
+</script>
+{% endblock %}
