@@ -1,36 +1,41 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-import boto3
-from boto3.dynamodb.conditions import Attr  # ✅ Added for filtering email
+from boto3.dynamodb.conditions import Attr
 from datetime import datetime
+import boto3
 import hashlib
 import uuid
+from flask_cors import CORS
+from waitress import serve
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
-from flask_cors import CORS
 CORS(app)
-
-
-# AWS Config
-dynamodb = boto3.resource('dynamodb', region_name='us-east-1')  # Your AWS region
-sns = boto3.client('sns', region_name='us-east-1')
-
-# DynamoDB Tables
-users_table = dynamodb.Table('Users')
-products_table = dynamodb.Table('Products')
-orders_table = dynamodb.Table('Orders')
-order_items_table = dynamodb.Table('OrderItems')
 
 # SNS Topic ARN
 SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:123456789012:OrderNotifications'
 
-# Password hashing
+# ---------- AWS INIT HELPERS ----------
+def get_dynamodb():
+    return boto3.resource('dynamodb', region_name='us-east-1')
+
+def get_sns():
+    return boto3.client('sns', region_name='us-east-1')
+
+def get_table(name):
+    return get_dynamodb().Table(name)
+
+# ---------- PASSWORD HASH ----------
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
+# ---------- ROUTES ----------
 @app.route('/')
 def home():
     return render_template('index.html')
+
+@app.route('/ping')
+def ping():
+    return "✅ Backend is live"
 
 @app.route('/auth')
 def auth():
@@ -43,6 +48,8 @@ def signup():
         email = request.form['email']
         password = hash_password(request.form['password'])
 
+        users_table = get_table('Users')
+
         try:
             # Check if username already exists
             username_response = users_table.get_item(Key={'username': username})
@@ -50,7 +57,7 @@ def signup():
                 flash('Username already exists!', 'error')
                 return render_template('signup.html')
 
-            # Check if email already exists using scan + filter
+            # Check if email already exists
             email_check = users_table.scan(
                 FilterExpression=Attr('email').eq(email)
             )
@@ -58,7 +65,6 @@ def signup():
                 flash('Email is already registered!', 'error')
                 return render_template('signup.html')
 
-            # Insert user
             users_table.put_item(Item={
                 'username': username,
                 'email': email,
@@ -80,6 +86,8 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = hash_password(request.form['password'])
+
+        users_table = get_table('Users')
 
         try:
             response = users_table.get_item(Key={'username': username})
@@ -103,6 +111,8 @@ def products():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    products_table = get_table('Products')
+
     try:
         response = products_table.scan()
         products = response.get('Items', [])
@@ -124,6 +134,8 @@ def add_to_cart(product_id):
             item['quantity'] += 1
             break
     else:
+        products_table = get_table('Products')
+
         try:
             product = products_table.get_item(Key={'id': product_id}).get('Item')
             if product:
@@ -199,6 +211,9 @@ def place_order():
         'order_date': str(datetime.utcnow())
     }
 
+    orders_table = get_table('Orders')
+    order_items_table = get_table('OrderItems')
+
     try:
         orders_table.put_item(Item=order_data)
 
@@ -213,11 +228,14 @@ def place_order():
 
         session['cart'] = []
 
-        sns.publish(
-            TopicArn=SNS_TOPIC_ARN,
-            Subject="New Order Placed",
-            Message=f"New order {order_id} placed by {order_data['customer_name']}."
-        )
+        try:
+            get_sns().publish(
+                TopicArn=SNS_TOPIC_ARN,
+                Subject="New Order Placed",
+                Message=f"New order {order_id} placed by {order_data['customer_name']}."
+            )
+        except Exception as sns_error:
+            print("SNS publish error:", sns_error)
 
     except Exception as e:
         print("Order Placement Error:", e)
@@ -231,8 +249,6 @@ def logout():
     session.clear()
     return redirect(url_for('home'))
 
-from waitress import serve
-
+# ---------- RUN APP ----------
 if __name__ == '__main__':
     serve(app, host='0.0.0.0', port=8080)
-
