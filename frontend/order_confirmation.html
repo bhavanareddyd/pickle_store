@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .confirmation-container {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .success-animation {
+        animation: bounceIn 1s ease-out;
+    }
+
+    @keyframes bounceIn {
+        0% {
+            transform: scale(0.3);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        70% {
+            transform: scale(0.9);
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .success-icon {
+        font-size: 8em;
+        margin-bottom: 30px;
+        display: block;
+        color: #27ae60;
+    }
+
+    .confirmation-title {
+        font-size: 2.5em;
+        color: #27ae60;
+        margin-bottom: 20px;
+    }
+
+    .order-details {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px 0;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .order-id {
+        font-size: 1.5em;
+        color: #2c3e50;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .customer-name {
+        color: #7f8c8d;
+        font-size: 1.2em;
+        margin-bottom: 20px;
+    }
+
+    .thank-you-message {
+        color: #7f8c8d;
+        font-size: 1.1em;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .continue-btn {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+    }
+
+    .celebration-confetti {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1000;
+    }
+
+    .confetti-piece {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: #f39c12;
+        animation: confetti-fall 3s linear infinite;
+    }
+
+    @keyframes confetti-fall {
+        0% {
+            transform: translateY(-100vh) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
+        }
+    }
+
+    .delivery-info {
+        background: rgba(39, 174, 96, 0.1);
+        border-left: 4px solid #27ae60;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 0 10px 10px 0;
+    }
+
+    .delivery-info h4 {
+        color: #27ae60;
+        margin-bottom: 10px;
+        font-size: 1.2em;
+    }
+
+    .delivery-info p {
+        color: #2c3e50;
+        margin: 5px 0;
+    }
+</style>
+
+<div class="confirmation-container success-animation">
+    <span class="success-icon">✅</span>
+    <h1 class="confirmation-title">Order Confirmed!</h1>
+    
+    <div class="order-details">
+        <div class="order-id">Order #{{ order_id }}</div>
+        <div class="customer-name">Thank you, {{ customer_name }}!</div>
+        
+        <div class="delivery-info">
+            <h4>📦 What's Next?</h4>
+            <p>• Your order is being prepared with care</p>
+            <p>• You'll receive SMS updates about your delivery</p>
+            <p>• Expected delivery: 2-3 business days</p>
+            <p>• Our team will contact you before delivery</p>
+        </div>
+        
+        <div class="thank-you-message">
+            Your delicious homemade pickles and snacks are on their way! 
+            We appreciate your trust in our traditional recipes and quality ingredients. 
+            Get ready to enjoy the authentic flavors that have been passed down for generations.
+        </div>
+
+        <div class="action-buttons">
+            <a href="{{ url_for('home') }}" class="continue-btn">🏠 Continue Shopping</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

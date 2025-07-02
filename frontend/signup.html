@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .signup-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px 0;
+    }
+
+    .signup-title {
+        text-align: center;
+        font-size: 2.5em;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+    .signup-subtitle {
+        text-align: center;
+        color: #7f8c8d;
+        margin-bottom: 40px;
+        font-size: 1.1em;
+    }
+
+    .form-container {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px 15px;
+        font-size: 1em;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.2em;
+        margin-top: 10px;
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .submit-btn:hover {
+        background: linear-gradient(45deg, #229954, #27ae60);
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 20px;
+        color: #7f8c8d;
+    }
+
+    .login-link a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="signup-container">
+    <h1 class="signup-title">📝 Create Account</h1>
+    <p class="signup-subtitle">Join our pickle family and start your delicious journey!</p>
+    
+    <div class="form-container">
+        <form method="POST" action="{{ url_for('signup') }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" required>
+            </div>
+            <button type="submit" class="submit-btn">Sign Up</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="{{ url_for('login') }}">Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

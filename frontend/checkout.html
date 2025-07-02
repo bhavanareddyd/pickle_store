@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .checkout-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .checkout-title {
+        text-align: center;
+        font-size: 2.5em;
+        color: #2c3e50;
+        margin-bottom: 40px;
+    }
+
+    .checkout-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+        .checkout-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .order-summary {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        height: fit-content;
+    }
+
+    .summary-title {
+        font-size: 1.5em;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #ecf0f1;
+    }
+
+    .summary-item:last-child {
+        border-bottom: none;
+        font-weight: bold;
+        font-size: 1.2em;
+        color: #e74c3c;
+        margin-top: 10px;
+        padding-top: 15px;
+        border-top: 2px solid #ecf0f1;
+    }
+
+    .checkout-form {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .form-title {
+        font-size: 1.5em;
+        color: #2c3e50;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .form-row-full {
+        grid-column: 1 / -1;
+    }
+
+    .payment-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .payment-option {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border: 2px solid #ecf0f1;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .payment-option:hover {
+        border-color: #667eea;
+    }
+
+    .payment-option input[type="radio"] {
+        margin-right: 8px;
+    }
+
+    .payment-option.selected {
+        border-color: #667eea;
+        background: rgba(102, 126, 234, 0.1);
+    }
+
+    .place-order-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.3em;
+        margin-top: 20px;
+        background: linear-gradient(45deg, #27ae60, #2ecc71);
+    }
+
+    .place-order-btn:hover {
+        background: linear-gradient(45deg, #229954, #27ae60);
+    }
+</style>
+
+<div class="checkout-container">
+    <h1 class="checkout-title">💳 Checkout</h1>
+    
+    <div class="checkout-grid">
+        <div class="checkout-form">
+            <h2 class="form-title">📋 Delivery Information</h2>
+            
+            <form method="POST" action="{{ url_for('place_order') }}">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">👤 Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mobile">📱 Mobile Number</label>
+                        <input type="tel" id="mobile" name="mobile" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">📧 Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">🏠 Delivery Address</label>
+                    <textarea id="address" name="address" rows="4" required 
+                              placeholder="Enter your complete delivery address with pincode"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>💳 Payment Method</label>
+                    <div class="payment-options">
+                        <div class="payment-option">
+                            <input type="radio" id="cod" name="payment_method" value="Cash on Delivery" required>
+                            <label for="cod">💵 COD</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="upi" name="payment_method" value="UPI" required>
+                            <label for="upi">📱 UPI</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="card" name="payment_method" value="Debit/Credit Card" required>
+                            <label for="card">💳 Card</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="netbanking" name="payment_method" value="Net Banking" required>
+                            <label for="netbanking">🏦 Banking</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn place-order-btn">
+                    🚀 Place Order
+                </button>
+            </form>
+        </div>
+        
+        <div class="order-summary">
+            <h2 class="summary-title">📋 Order Summary</h2>
+            
+            {% for item in cart %}
+            <div class="summary-item">
+                <span>{{ item.name }} × {{ item.quantity }}</span>
+                <span>₹{{ "%.0f"|format(item.price * item.quantity) }}</span>
+            </div>
+            {% endfor %}
+            
+            <div class="summary-item">
+                <span>Total Amount</span>
+                <span>₹{{ "%.0f"|format(total) }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Handle payment option selection
+    document.querySelectorAll('.payment-option').forEach(option => {
+        option.addEventListener('click', function() {
+            // Remove selected class from all options
+            document.querySelectorAll('.payment-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            this.classList.add('selected');
+            
+            // Check the radio button
+            this.querySelector('input[type="radio"]').checked = true;
+        });
+    });
+</script>
+{% endblock %}
