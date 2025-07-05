@@ -168,8 +168,7 @@
         
         // Update active button
         buttons.forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-
+        event.target.classList.add('active');
         
         // Filter products
         cards.forEach(card => {
