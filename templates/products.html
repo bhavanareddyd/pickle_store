@@ -5,42 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Products - Pickle Store</title>
     <style>
-        /* Your existing CSS remains unchanged */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
+
         .header {
             text-align: center;
             color: white;
             margin-bottom: 40px;
         }
+
         .header h1 {
             font-size: 3em;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
+
         .header p {
             font-size: 1.2em;
             opacity: 0.9;
         }
+
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 30px;
             margin-top: 30px;
         }
+
         .product-card {
             background: white;
             border-radius: 20px;
@@ -50,10 +56,12 @@
             position: relative;
             overflow: hidden;
         }
+
         .product-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         }
+
         .product-card::before {
             content: '';
             position: absolute;
@@ -63,6 +71,7 @@
             height: 4px;
             background: linear-gradient(90deg, #667eea, #764ba2);
         }
+
         .product-image {
             width: 100%;
             height: 180px;
@@ -76,6 +85,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .product-image::after {
             content: '';
             position: absolute;
@@ -85,6 +95,7 @@
             bottom: 0;
             background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%);
         }
+
         .product-category {
             position: absolute;
             top: 15px;
@@ -97,18 +108,21 @@
             color: #2c3e50;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
+
         .product-info h3 {
             color: #2c3e50;
             font-size: 1.5em;
             margin-bottom: 10px;
             font-weight: 600;
         }
+
         .product-description {
             color: #7f8c8d;
             margin-bottom: 20px;
             line-height: 1.6;
             font-size: 0.95em;
         }
+
         .product-price {
             font-size: 1.8em;
             font-weight: bold;
@@ -116,6 +130,7 @@
             margin-bottom: 20px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
+
         .add-to-cart-btn {
             width: 100%;
             padding: 15px;
@@ -129,14 +144,17 @@
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
         }
+
         .add-to-cart-btn:hover {
             background: linear-gradient(45deg, #219a52, #27ae60);
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
         }
+
         .add-to-cart-btn:active {
             transform: translateY(0);
         }
+
         .quantity-selector {
             display: flex;
             align-items: center;
@@ -144,6 +162,7 @@
             margin-bottom: 15px;
             gap: 10px;
         }
+
         .quantity-btn {
             width: 35px;
             height: 35px;
@@ -156,10 +175,12 @@
             font-weight: bold;
             transition: all 0.3s ease;
         }
+
         .quantity-btn:hover {
             background: #667eea;
             color: white;
         }
+
         .quantity-display {
             font-size: 1.2em;
             font-weight: bold;
@@ -167,6 +188,7 @@
             min-width: 30px;
             text-align: center;
         }
+
         .success-message {
             position: fixed;
             top: 20px;
@@ -180,9 +202,11 @@
             transition: transform 0.3s ease;
             z-index: 1000;
         }
+
         .success-message.show {
             transform: translateX(0);
         }
+
         .cart-icon {
             position: fixed;
             top: 20px;
@@ -196,6 +220,7 @@
             font-size: 1.5em;
             z-index: 999;
         }
+
         .cart-count {
             position: absolute;
             top: -5px;
@@ -211,16 +236,230 @@
             font-size: 0.8em;
             font-weight: bold;
         }
+
+        /* Cart Modal Styles */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .cart-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .cart-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .cart-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .cart-title {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .close-cart {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .close-cart:hover {
+            color: #e74c3c;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+
+        .cart-empty-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .cart-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            flex-shrink: 0;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .cart-qty-btn {
+            width: 25px;
+            height: 25px;
+            border: 1px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .cart-qty-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .cart-item-total {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #27ae60;
+            text-align: right;
+        }
+
+        .remove-item-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 10px;
+        }
+
+        .remove-item-btn:hover {
+            background: #c0392b;
+        }
+
+        .cart-summary {
+            border-top: 2px solid #ecf0f1;
+            padding-top: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .cart-total {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .checkout-btn:hover {
+            background: linear-gradient(45deg, #c0392b, #a93226);
+            transform: translateY(-2px);
+        }
+
+        .continue-shopping {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .continue-shopping:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 768px) {
             .products-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
+            
             .header h1 {
                 font-size: 2em;
             }
+            
             .product-card {
                 padding: 20px;
+            }
+
+            .cart-content {
+                margin: 10px;
+                padding: 20px;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .cart-item-details {
+                width: 100%;
             }
         }
     </style>
@@ -238,8 +477,142 @@
         </div>
 
         <div class="products-grid">
-            <!-- All product cards go here (as you already had) -->
-            <!-- ... your product cards remain unchanged ... -->
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥒
+                    <div class="product-category">Pickle</div>
+                </div>
+                <div class="product-info">
+                    <h3>Mango Pickle</h3>
+                    <p class="product-description">Spicy and tangy mango pickle made with traditional spices and mustard oil</p>
+                    <div class="product-price">₹150</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(1, -1)">-</button>
+                        <span class="quantity-display" id="qty-1">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(1, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(1, 'Mango Pickle', 150, '🥒')">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥒
+                    <div class="product-category">Pickle</div>
+                </div>
+                <div class="product-info">
+                    <h3>Mixed Vegetable Pickle</h3>
+                    <p class="product-description">Assorted vegetables including carrots, cauliflower, and turnips in aromatic spices</p>
+                    <div class="product-price">₹200</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(2, -1)">-</button>
+                        <span class="quantity-display" id="qty-2">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(2, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(2, 'Mixed Vegetable Pickle', 200, '🥒')">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥒
+                    <div class="product-category">Pickle</div>
+                </div>
+                <div class="product-info">
+                    <h3>Lemon Pickle</h3>
+                    <p class="product-description">Fresh lemon pickle with green chilies and mustard seeds for that perfect zing</p>
+                    <div class="product-price">₹120</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(3, -1)">-</button>
+                        <span class="quantity-display" id="qty-3">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(3, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(3, 'Lemon Pickle', 120, '🥒')">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥜
+                    <div class="product-category">Snack</div>
+                </div>
+                <div class="product-info">
+                    <h3>Spicy Peanuts</h3>
+                    <p class="product-description">Roasted peanuts with red chili powder, turmeric, and salt - perfect tea-time snack</p>
+                    <div class="product-price">₹80</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(4, -1)">-</button>
+                        <span class="quantity-display" id="qty-4">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(4, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(4, 'Spicy Peanuts', 80, '🥜')">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥜
+                    <div class="product-category">Snack</div>
+                </div>
+                <div class="product-info">
+                    <h3>Mixture</h3>
+                    <p class="product-description">Traditional South Indian mixture with sev, peanuts, curry leaves, and spices</p>
+                    <div class="product-price">₹100</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(5, -1)">-</button>
+                        <span class="quantity-display" id="qty-5">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(5, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(5, 'Mixture', 100, '🥜')">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥒
+                    <div class="product-category">Pickle</div>
+                </div>
+                <div class="product-info">
+                    <h3>Ginger Pickle</h3>
+                    <p class="product-description">Fresh ginger pickle with jaggery and tamarind - sweet and spicy combination</p>
+                    <div class="product-price">₹140</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(6, -1)">-</button>
+                        <span class="quantity-display" id="qty-6">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(6, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(6, 'Ginger Pickle', 140, '🥒')">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <button class="close-cart" onclick="closeCart()">×</button>
+            <div class="cart-header">
+                <h1 class="cart-title">🛒 Your Cart</h1>
+            </div>
+            <div id="cartItems"></div>
         </div>
     </div>
 
@@ -258,10 +631,12 @@
             qtyElement.textContent = newQty;
         }
 
-        function addToCart(productId, productName, price) {
+        function addToCart(productId, productName, price, emoji) {
             const quantity = parseInt(document.getElementById(`qty-${productId}`).textContent);
+            
+            // Check if item already exists in cart
             const existingItem = cart.find(item => item.id === productId);
-
+            
             if (existingItem) {
                 existingItem.quantity += quantity;
             } else {
@@ -269,12 +644,15 @@
                     id: productId,
                     name: productName,
                     price: price,
-                    quantity: quantity
+                    quantity: quantity,
+                    emoji: emoji
                 });
             }
-
+            
             updateCartCount();
             showSuccessMessage();
+            
+            // Reset quantity to 1 after adding
             document.getElementById(`qty-${productId}`).textContent = '1';
         }
 
@@ -291,13 +669,104 @@
             }, 3000);
         }
 
-        // ✅ Updated viewCart function
         function viewCart() {
-            window.location.href = 'cart.html';
+            const modal = document.getElementById('cartModal');
+            const cartItemsContainer = document.getElementById('cartItems');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="cart-empty">
+                        <span class="cart-empty-icon">🛒</span>
+                        <h2>Your cart is empty!</h2>
+                        <p>Add some delicious pickles and snacks to get started.</p>
+                    </div>
+                `;
+            } else {
+                let cartHTML = '';
+                let total = 0;
+                
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    
+                    cartHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-image">${item.emoji}</div>
+                            <div class="cart-item-details">
+                                <div class="cart-item-name">${item.name}</div>
+                                <div class="cart-item-price">₹${item.price} each</div>
+                                <div class="cart-item-quantity">
+                                    <button class="cart-qty-btn" onclick="updateCartQuantity(${item.id}, -1)">-</button>
+                                    <span style="margin: 0 10px; font-weight: bold;">${item.quantity}</span>
+                                    <button class="cart-qty-btn" onclick="updateCartQuantity(${item.id}, 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="cart-item-total">
+                                ₹${itemTotal}
+                                <button class="remove-item-btn" onclick="removeFromCart(${item.id})">×</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                cartHTML += `
+                    <div class="cart-summary">
+                        <div class="cart-total">Total: ₹${total}</div>
+                        <button class="checkout-btn" onclick="checkout()">💳 Proceed to Checkout</button>
+                        <a href="#" class="continue-shopping" onclick="closeCart()">← Continue Shopping</a>
+                    </div>
+                `;
+                
+                cartItemsContainer.innerHTML = cartHTML;
+            }
+            
+            modal.classList.add('show');
         }
 
-        // Load animation
-        document.addEventListener('DOMContentLoaded', function () {
+        function closeCart() {
+            document.getElementById('cartModal').classList.remove('show');
+        }
+
+        function updateCartQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity = Math.max(1, item.quantity + change);
+                updateCartCount();
+                viewCart(); // Refresh cart display
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartCount();
+            viewCart(); // Refresh cart display
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            alert(`Thank you for your order!\n\nTotal: ₹${total}\n\nRedirecting to payment...`);
+            
+            // Clear cart after checkout
+            cart = [];
+            updateCartCount();
+            closeCart();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target == modal) {
+                closeCart();
+            }
+        }
+
+        // Add some animation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
             const cards = document.querySelectorAll('.product-card');
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
