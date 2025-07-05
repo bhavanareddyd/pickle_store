@@ -1,122 +1,693 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Products - Pickle Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-{% block content %}
-<style>
-    .section-header {
-        text-align: center;
-        margin: 50px 0 30px;
-    }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    .section-title {
-        font-size: 2em;
-        color: #2c3e50;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-    .products-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 25px;
-        margin: 20px 0;
-    }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
 
-    .product-card {
-        background: white;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        text-align: center;
-        transition: 0.3s;
-    }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
 
-    .product-card:hover {
-        transform: translateY(-5px);
-    }
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
 
-    .product-image {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-        border-radius: 10px;
-        margin-bottom: 15px;
-    }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
 
-    .product-name {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: #34495e;
-        margin-bottom: 8px;
-    }
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .product-price {
-        color: #e74c3c;
-        font-size: 1.1em;
-        font-weight: bold;
-        margin-bottom: 12px;
-    }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
 
-    .add-to-cart-btn {
-        padding: 10px 20px;
-        background: linear-gradient(45deg, #27ae60, #2ecc71);
-        color: white;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        text-decoration: none;
-    }
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
 
-    .add-to-cart-btn:hover {
-        background: linear-gradient(45deg, #229954, #27ae60);
-    }
-</style>
+        .product-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
 
-<!-- Veg Pickles -->
-<div class="section-header">
-    <h2 class="section-title">🥒 Veg Pickles</h2>
-</div>
-<div class="products-grid">
-    {% for product in products %}
-        {% if product[5] == 'veg_pickle' %}
-        <div class="product-card">
-            <img src="{{ url_for('static', filename='images/' + product[4]) }}" alt="{{ product[1] }}" class="product-image">
-            <div class="product-name">{{ product[1] }}</div>
-            <div class="product-price">₹{{ "%.0f"|format(product[3]) }}</div>
-            <a href="{{ url_for('add_to_cart', product_id=product[0]) }}" class="add-to-cart-btn">Add to Cart</a>
+        .product-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+
+        .product-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.95);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            color: #2c3e50;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .product-info h3 {
+            color: #2c3e50;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .product-description {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .product-price {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .add-to-cart-btn:hover {
+            background: linear-gradient(45deg, #219a52, #27ae60);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+        }
+
+        .add-to-cart-btn:active {
+            transform: translateY(0);
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 35px;
+            height: 35px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .quantity-display {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .success-message.show {
+            transform: translateX(0);
+        }
+
+        .cart-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #667eea;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            font-size: 1.5em;
+            z-index: 999;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .product-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛍️ Our Products</h1>
+            <p>Fresh, homemade pickles and snacks made with love</p>
         </div>
-        {% endif %}
-    {% endfor %}
-</div>
 
-<!-- Non-Veg Pickles -->
-<div class="section-header">
-    <h2 class="section-title">🍗 Non-Veg Pickles</h2>
-</div>
-<div class="products-grid">
-    {% for product in products %}
-        {% if product[5] == 'nonveg_pickle' %}
-        <div class="product-card">
-            <img src="{{ url_for('static', filename='images/' + product[4]) }}" alt="{{ product[1] }}" class="product-image">
-            <div class="product-name">{{ product[1] }}</div>
-            <div class="product-price">₹{{ "%.0f"|format(product[3]) }}</div>
-            <a href="{{ url_for('add_to_cart', product_id=product[0]) }}" class="add-to-cart-btn">Add to Cart</a>
+        <div class="cart-icon" onclick="viewCart()">
+            🛒
+            <span class="cart-count" id="cartCount">0</span>
         </div>
-        {% endif %}
-    {% endfor %}
-</div>
 
-<!-- Snacks -->
-<div class="section-header">
-    <h2 class="section-title">🥜 Snacks</h2>
-</div>
-<div class="products-grid">
-    {% for product in products %}
-        {% if product[5] == 'snack' %}
-        <div class="product-card">
-            <img src="{{ url_for('static', filename='images/' + product[4]) }}" alt="{{ product[1] }}" class="product-image">
-            <div class="product-name">{{ product[1] }}</div>
-            <div class="product-price">₹{{ "%.0f"|format(product[3]) }}</div>
-            <a href="{{ url_for('add_to_cart', product_id=product[0]) }}" class="add-to-cart-btn">Add to Cart</a>
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥒
+                    <div class="product-category">Pickle</div>
+                </div>
+                <div class="product-info">
+                    <h3>Mango Pickle</h3>
+                    <p class="product-description">Spicy and tangy mango pickle made with traditional spices and mustard oil</p>
+                    <div class="product-price">₹150</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(1, -1)">-</button>
+                        <span class="quantity-display" id="qty-1">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(1, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(1, 'Mango Pickle', 150)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥒
+                    <div class="product-category">Pickle</div>
+                </div>
+                <div class="product-info">
+                    <h3>Mixed Vegetable Pickle</h3>
+                    <p class="product-description">Assorted vegetables including carrots, cauliflower, and turnips in aromatic spices</p>
+                    <div class="product-price">₹200</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(2, -1)">-</button>
+                        <span class="quantity-display" id="qty-2">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(2, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(2, 'Mixed Vegetable Pickle', 200)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥒
+                    <div class="product-category">Pickle</div>
+                </div>
+                <div class="product-info">
+                    <h3>Lemon Pickle</h3>
+                    <p class="product-description">Fresh lemon pickle with green chilies and mustard seeds for that perfect zing</p>
+                    <div class="product-price">₹120</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(3, -1)">-</button>
+                        <span class="quantity-display" id="qty-3">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(3, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(3, 'Lemon Pickle', 120)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥜
+                    <div class="product-category">Snack</div>
+                </div>
+                <div class="product-info">
+                    <h3>Spicy Peanuts</h3>
+                    <p class="product-description">Roasted peanuts with red chili powder, turmeric, and salt - perfect tea-time snack</p>
+                    <div class="product-price">₹80</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(4, -1)">-</button>
+                        <span class="quantity-display" id="qty-4">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(4, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(4, 'Spicy Peanuts', 80)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥜
+                    <div class="product-category">Snack</div>
+                </div>
+                <div class="product-info">
+                    <h3>Mixture</h3>
+                    <p class="product-description">Traditional South Indian mixture with sev, peanuts, curry leaves, and spices</p>
+                    <div class="product-price">₹100</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(5, -1)">-</button>
+                        <span class="quantity-display" id="qty-5">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(5, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(5, 'Mixture', 100)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥒
+                    <div class="product-category">Pickle</div>
+                </div>
+                <div class="product-info">
+                    <h3>Ginger Pickle</h3>
+                    <p class="product-description">Fresh ginger pickle with jaggery and tamarind - sweet and spicy combination</p>
+                    <div class="product-price">₹140</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(6, -1)">-</button>
+                        <span class="quantity-display" id="qty-6">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(6, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(6, 'Ginger Pickle', 140)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 7 - Chicken Pickle -->
+            <div class="product-card">
+                <div class="product-image">
+                    🍗
+                    <div class="product-category">Non-Veg Pickle</div>
+                </div>
+                <div class="product-info">
+                    <h3>Chicken Pickle</h3>
+                    <p class="product-description">Tender chicken pieces marinated in spices and cooked in mustard oil - a non-veg delight</p>
+                    <div class="product-price">₹350</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(7, -1)">-</button>
+                        <span class="quantity-display" id="qty-7">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(7, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(7, 'Chicken Pickle', 350)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 8 - Mutton Pickle -->
+            <div class="product-card">
+                <div class="product-image">
+                    🍖
+                    <div class="product-category">Non-Veg Pickle</div>
+                </div>
+                <div class="product-info">
+                    <h3>Mutton Pickle</h3>
+                    <p class="product-description">Succulent mutton pieces slow-cooked with aromatic spices and herbs</p>
+                    <div class="product-price">₹450</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(8, -1)">-</button>
+                        <span class="quantity-display" id="qty-8">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(8, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(8, 'Mutton Pickle', 450)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 9 - Fish Pickle -->
+            <div class="product-card">
+                <div class="product-image">
+                    🐟
+                    <div class="product-category">Non-Veg Pickle</div>
+                </div>
+                <div class="product-info">
+                    <h3>Fish Pickle</h3>
+                    <p class="product-description">Fresh fish marinated in tangy tamarind and spices - coastal style preparation</p>
+                    <div class="product-price">₹280</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(9, -1)">-</button>
+                        <span class="quantity-display" id="qty-9">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(9, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(9, 'Fish Pickle', 280)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 10 - Murukulu -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥨
+                    <div class="product-category">Snack</div>
+                </div>
+                <div class="product-info">
+                    <h3>Murukulu</h3>
+                    <p class="product-description">Traditional South Indian spiral-shaped crispy snack made with rice flour and spices</p>
+                    <div class="product-price">₹120</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(10, -1)">-</button>
+                        <span class="quantity-display" id="qty-10">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(10, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(10, 'Murukulu', 120)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 11 - Ribbon Pakoda -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥨
+                    <div class="product-category">Snack</div>
+                </div>
+                <div class="product-info">
+                    <h3>Ribbon Pakoda</h3>
+                    <p class="product-description">Crispy ribbon-shaped deep-fried snack with gram flour and spices</p>
+                    <div class="product-price">₹110</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(11, -1)">-</button>
+                        <span class="quantity-display" id="qty-11">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(11, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(11, 'Ribbon Pakoda', 110)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 12 - Banana Chips -->
+            <div class="product-card">
+                <div class="product-image">
+                    🍌
+                    <div class="product-category">Snack</div>
+                </div>
+                <div class="product-info">
+                    <h3>Banana Chips</h3>
+                    <p class="product-description">Crispy banana chips made from raw bananas, perfectly salted and fried</p>
+                    <div class="product-price">₹90</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(12, -1)">-</button>
+                        <span class="quantity-display" id="qty-12">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(12, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(12, 'Banana Chips', 90)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 13 - Masala Peanuts -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥜
+                    <div class="product-category">Snack</div>
+                </div>
+                <div class="product-info">
+                    <h3>Masala Peanuts</h3>
+                    <p class="product-description">Roasted peanuts coated with spicy masala - perfect evening snack</p>
+                    <div class="product-price">₹85</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(13, -1)">-</button>
+                        <span class="quantity-display" id="qty-13">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(13, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(13, 'Masala Peanuts', 85)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 14 - Chekodi -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥨
+                    <div class="product-category">Snack</div>
+                </div>
+                <div class="product-info">
+                    <h3>Chekodi</h3>
+                    <p class="product-description">Traditional Andhra ring-shaped crispy snack made with rice flour and cumin</p>
+                    <div class="product-price">₹100</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(14, -1)">-</button>
+                        <span class="quantity-display" id="qty-14">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(14, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(14, 'Chekodi', 100)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 15 - Garlic Pickle -->
+            <div class="product-card">
+                <div class="product-image">
+                    🧄
+                    <div class="product-category">Pickle</div>
+                </div>
+                <div class="product-info">
+                    <h3>Garlic Pickle</h3>
+                    <p class="product-description">Spicy garlic pickle with sesame oil and fenugreek powder - healthy and flavorful</p>
+                    <div class="product-price">₹160</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(15, -1)">-</button>
+                        <span class="quantity-display" id="qty-15">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(15, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(15, 'Garlic Pickle', 160)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product 16 - Coconut Burfi -->
+            <div class="product-card">
+                <div class="product-image">
+                    🥥
+                    <div class="product-category">Sweet</div>
+                </div>
+                <div class="product-info">
+                    <h3>Coconut Burfi</h3>
+                    <p class="product-description">Traditional coconut sweet made with fresh coconut, ghee, and cardamom</p>
+                    <div class="product-price">₹180</div>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn" onclick="changeQuantity(16, -1)">-</button>
+                        <span class="quantity-display" id="qty-16">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(16, 1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCart(16, 'Coconut Burfi', 180)">
+                        🛒 Add to Cart
+                    </button>
+                </div>
+            </div>
         </div>
-        {% endif %}
-    {% endfor %}
-</div>
-{% endblock %}
+    </div>
+
+    <div class="success-message" id="successMessage">
+        Item added to cart! 🎉
+    </div>
+
+    <script>
+        // Cart functionality
+        let cart = [];
+
+        function changeQuantity(productId, change) {
+            const qtyElement = document.getElementById(`qty-${productId}`);
+            let currentQty = parseInt(qtyElement.textContent);
+            const newQty = Math.max(1, currentQty + change);
+            qtyElement.textContent = newQty;
+        }
+
+        function addToCart(productId, productName, price) {
+            const quantity = parseInt(document.getElementById(`qty-${productId}`).textContent);
+            
+            // Check if item already exists in cart
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: productName,
+                    price: price,
+                    quantity: quantity
+                });
+            }
+            
+            updateCartCount();
+            showSuccessMessage();
+            
+            // Reset quantity to 1 after adding
+            document.getElementById(`qty-${productId}`).textContent = '1';
+        }
+
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+        }
+
+        function showSuccessMessage() {
+            const message = document.getElementById('successMessage');
+            message.classList.add('show');
+            setTimeout(() => {
+                message.classList.remove('show');
+            }, 3000);
+        }
+
+        function viewCart() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            let cartDetails = 'Your Cart:\n\n';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                cartDetails += `${item.name} - Qty: ${item.quantity} - ₹${itemTotal}\n`;
+                total += itemTotal;
+            });
+            
+            cartDetails += `\nTotal: ₹${total}`;
+            alert(cartDetails);
+        }
+
+        // Add some animation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
