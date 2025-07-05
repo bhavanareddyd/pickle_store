@@ -434,6 +434,240 @@
             text-decoration: underline;
         }
 
+        /* Checkout Form Styles */
+        .checkout-form {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .checkout-form.show {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .order-summary {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .order-summary h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #27ae60;
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .payment-option {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .payment-option:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+
+        .payment-option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .payment-option input[type="radio"] {
+            display: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            flex: 2;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #219a52, #27ae60);
+            transform: translateY(-2px);
+        }
+
+        /* Final Confirmation Styles */
+        .final-confirmation {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+
+        .final-confirmation.show {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            color: #27ae60;
+        }
+
+        .confirmation-title {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .confirmation-message {
+            font-size: 1.2em;
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .order-details {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .order-details h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .detail-value {
+            color: #7f8c8d;
+        }
+
+        .back-to-shopping {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-shopping:hover {
+            background: linear-gradient(45deg, #5a67d8, #667eea);
+            transform: translateY(-2px);
+        }
+
         @media (max-width: 768px) {
             .products-grid {
                 grid-template-columns: 1fr;
@@ -448,7 +682,7 @@
                 padding: 20px;
             }
 
-            .cart-content {
+            .cart-content, .checkout-form, .final-confirmation {
                 margin: 10px;
                 padding: 20px;
             }
@@ -460,6 +694,18 @@
 
             .cart-item-details {
                 width: 100%;
+            }
+
+            .payment-options {
+                flex-direction: column;
+            }
+
+            .payment-option {
+                min-width: auto;
+            }
+
+            .form-actions {
+                flex-direction: column;
             }
         }
     </style>
@@ -607,12 +853,87 @@
 
     <!-- Cart Modal -->
     <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
+        <div class="cart-content" id="cartContent">
             <button class="close-cart" onclick="closeCart()">×</button>
             <div class="cart-header">
                 <h1 class="cart-title">🛒 Your Cart</h1>
             </div>
             <div id="cartItems"></div>
+        </div>
+
+        <!-- Checkout Form -->
+        <div class="checkout-form" id="checkoutForm">
+            <button class="close-cart" onclick="closeCart()">×</button>
+            <div class="cart-header">
+                <h1 class="cart-title">📋 Order Details</h1>
+            </div>
+            
+            <div class="order-summary">
+                <h3>Order Summary</h3>
+                <div id="orderSummary"></div>
+            </div>
+
+            <form id="orderForm">
+                <div class="form-group">
+                    <label for="customerName">Full Name *</label>
+                    <input type="text" id="customerName" name="customerName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerPhone">Mobile Number *</label>
+                    <input type="tel" id="customerPhone" name="customerPhone" required pattern="[0-9]{10}" placeholder="Enter 10-digit mobile number">
+                </div>
+
+                <div class="form-group">
+                    <label for="customerEmail">Email Address</label>
+                    <input type="email" id="customerEmail" name="customerEmail" placeholder="Optional">
+                </div>
+
+                <div class="form-group">
+                    <label for="customerAddress">Delivery Address *</label>
+                    <textarea id="customerAddress" name="customerAddress" required placeholder="Enter your complete address with pincode"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Mode *</label>
+                    <div class="payment-options">
+                        <div class="payment-option" onclick="selectPayment('cod')">
+                            <input type="radio" name="paymentMode" value="cod" id="cod">
+                            <div>💵 Cash on Delivery</div>
+                        </div>
+                        <div class="payment-option" onclick="selectPayment('online')">
+                            <input type="radio" name="paymentMode" value="online" id="online">
+                            <div>💳 Online Payment</div>
+                        </div>
+                        <div class="payment-option" onclick="selectPayment('upi')">
+                            <input type="radio" name="paymentMode" value="upi" id="upi">
+                            <div>📱 UPI Payment</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="backToCart()">← Back to Cart</button>
+                    <button type="submit" class="btn-primary">🚀 Proceed to Buy</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Final Confirmation -->
+        <div class="final-confirmation" id="finalConfirmation">
+            <div class="success-icon">🎉</div>
+            <h1 class="confirmation-title">Thank You for Your Order!</h1>
+            <p class="confirmation-message">
+                Your order has been successfully placed and will be delivered within 2-3 business days. 
+                You will receive a confirmation call shortly.
+            </p>
+            
+            <div class="order-details">
+                <h4>Order Details</h4>
+                <div id="finalOrderDetails"></div>
+            </div>
+
+            <button class="back-to-shopping" onclick="backToShopping()">🛍️ Continue Shopping</button>
         </div>
     </div>
 
@@ -623,6 +944,8 @@
     <script>
         // Cart functionality
         let cart = [];
+        let currentStep = 'cart'; // cart, checkout, confirmation
+        let orderDetails = {};
 
         function changeQuantity(productId, change) {
             const qtyElement = document.getElementById(`qty-${productId}`);
@@ -671,6 +994,15 @@
 
         function viewCart() {
             const modal = document.getElementById('cartModal');
+            const cartContent = document.getElementById('cartContent');
+            const checkoutForm = document.getElementById('checkoutForm');
+            const finalConfirmation = document.getElementById('finalConfirmation');
+            
+            // Show cart content, hide others
+            cartContent.style.display = 'block';
+            checkoutForm.style.display = 'none';
+            finalConfirmation.style.display = 'none';
+            
             const cartItemsContainer = document.getElementById('cartItems');
             
             if (cart.length === 0) {
@@ -712,7 +1044,7 @@
                 cartHTML += `
                     <div class="cart-summary">
                         <div class="cart-total">Total: ₹${total}</div>
-                        <button class="checkout-btn" onclick="checkout()">💳 Proceed to Checkout</button>
+                        <button class="checkout-btn" onclick="showCheckout()">💳 Proceed to Checkout</button>
                         <a href="#" class="continue-shopping" onclick="closeCart()">← Continue Shopping</a>
                     </div>
                 `;
@@ -742,20 +1074,190 @@
             viewCart(); // Refresh cart display
         }
 
-        function checkout() {
+        function showCheckout() {
             if (cart.length === 0) {
                 alert('Your cart is empty!');
                 return;
             }
             
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            alert(`Thank you for your order!\n\nTotal: ₹${total}\n\nRedirecting to payment...`);
+            const cartContent = document.getElementById('cartContent');
+            const checkoutForm = document.getElementById('checkoutForm');
+            const finalConfirmation = document.getElementById('finalConfirmation');
             
-            // Clear cart after checkout
+            // Hide cart content, show checkout form
+            cartContent.style.display = 'none';
+            checkoutForm.style.display = 'block';
+            finalConfirmation.style.display = 'none';
+            
+            // Populate order summary
+            const orderSummary = document.getElementById('orderSummary');
+            let summaryHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                summaryHTML += `
+                    <div class="order-item">
+                        <span>${item.emoji} ${item.name} x${item.quantity}</span>
+                        <span>₹${itemTotal}</span>
+                    </div>
+                `;
+            });
+            
+            summaryHTML += `
+                <div class="order-item">
+                    <span>Total Amount</span>
+                    <span>₹${total}</span>
+                </div>
+            `;
+            
+            orderSummary.innerHTML = summaryHTML;
+            
+            // Clear form
+            document.getElementById('orderForm').reset();
+            clearPaymentSelection();
+        }
+
+        function selectPayment(paymentType) {
+            // Clear previous selections
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Select current option
+            document.querySelector(`input[value="${paymentType}"]`).checked = true;
+            document.querySelector(`input[value="${paymentType}"]`).parentElement.classList.add('selected');
+        }
+
+        function clearPaymentSelection() {
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+        }
+
+        function backToCart() {
+            const cartContent = document.getElementById('cartContent');
+            const checkoutForm = document.getElementById('checkoutForm');
+            
+            cartContent.style.display = 'block';
+            checkoutForm.style.display = 'none';
+            
+            viewCart(); // Refresh cart display
+        }
+
+        function showFinalConfirmation() {
+            const cartContent = document.getElementById('cartContent');
+            const checkoutForm = document.getElementById('checkoutForm');
+            const finalConfirmation = document.getElementById('finalConfirmation');
+            
+            // Hide checkout form, show final confirmation
+            cartContent.style.display = 'none';
+            checkoutForm.style.display = 'none';
+            finalConfirmation.style.display = 'block';
+            
+            // Populate final order details
+            const finalOrderDetails = document.getElementById('finalOrderDetails');
+            let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            let detailsHTML = `
+                <div class="detail-row">
+                    <span class="detail-label">Order ID:</span>
+                    <span class="detail-value">#PKL${Date.now().toString().slice(-6)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Customer Name:</span>
+                    <span class="detail-value">${orderDetails.customerName}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Mobile Number:</span>
+                    <span class="detail-value">${orderDetails.customerPhone}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Delivery Address:</span>
+                    <span class="detail-value">${orderDetails.customerAddress}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Payment Mode:</span>
+                    <span class="detail-value">${getPaymentModeText(orderDetails.paymentMode)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Total Amount:</span>
+                    <span class="detail-value">₹${total}</span>
+                </div>
+            `;
+            
+            finalOrderDetails.innerHTML = detailsHTML;
+        }
+
+        function getPaymentModeText(paymentMode) {
+            switch(paymentMode) {
+                case 'cod': return 'Cash on Delivery';
+                case 'online': return 'Online Payment';
+                case 'upi': return 'UPI Payment';
+                default: return 'Not Selected';
+            }
+        }
+
+        function backToShopping() {
+            // Clear cart and close modal
             cart = [];
             updateCartCount();
             closeCart();
+            
+            // Show success message
+            const message = document.getElementById('successMessage');
+            message.innerHTML = 'Thank you for shopping with us! 🎉';
+            message.classList.add('show');
+            setTimeout(() => {
+                message.classList.remove('show');
+                message.innerHTML = 'Item added to cart! 🎉'; // Reset message
+            }, 4000);
         }
+
+        // Handle form submission
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            const address = document.getElementById('customerAddress').value.trim();
+            const paymentMode = document.querySelector('input[name="paymentMode"]:checked');
+            
+            if (!name || !phone || !address || !paymentMode) {
+                alert('Please fill in all required fields and select a payment mode.');
+                return;
+            }
+            
+            // Validate phone number
+            if (!/^\d{10}$/.test(phone)) {
+                alert('Please enter a valid 10-digit mobile number.');
+                return;
+            }
+            
+            // Store order details
+            orderDetails = {
+                customerName: name,
+                customerPhone: phone,
+                customerEmail: document.getElementById('customerEmail').value.trim(),
+                customerAddress: address,
+                paymentMode: paymentMode.value
+            };
+            
+            // Show loading state
+            const submitBtn = document.querySelector('.btn-primary');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '⏳ Processing...';
+            submitBtn.disabled = true;
+            
+            // Simulate processing delay
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                showFinalConfirmation();
+            }, 2000);
+        });
 
         // Close modal when clicking outside
         window.onclick = function(event) {
